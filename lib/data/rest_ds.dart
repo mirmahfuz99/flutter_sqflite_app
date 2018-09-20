@@ -13,9 +13,10 @@ class RestDataSource {
   Future<User> login(String email, String password) async {
     final data = await NetworkUtil.instance.post(LOGIN_URL, body: {
 //      "token": _API_KEY,
-      "email": "email",
-      "password": "password"
+      "email": email,
+      "password": password
     });
+    print(data);
     if (data.containsKey('error')) {
       throw Exception(data['error_msg']);
     }
