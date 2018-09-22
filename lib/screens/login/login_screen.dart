@@ -102,11 +102,7 @@ class LoginScreenState extends State<LoginScreen>
       appBar: null,
       key: scaffoldKey,
       body: new Container(
-        decoration: new BoxDecoration(
-          image: new DecorationImage(
-              image: new AssetImage("assets/login_background.jpg"),
-              fit: BoxFit.cover),
-        ),
+        
         child: new Center(
           child: new ClipRect(
             child: new BackdropFilter(
@@ -137,7 +133,7 @@ class LoginScreenState extends State<LoginScreen>
     setState(() => _isLoading = false);
     var db = new DatabaseHelper();
     await db.saveUser(user);
-//    Navigator.of(context).pushNamed("/home");
+    // Navigator.of(context).pushNamed("/home");
     var authStateProvider = new AuthStateProvider();
     authStateProvider.notify(AuthState.LOGGED_IN);
   }
