@@ -33,17 +33,6 @@ class LoginScreenState extends State<LoginScreen>{
     }
   }
 
-//  void _showSnackBar(String text) {
-//    scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(text)));
-//  }
-//
-//  @override
-//  onAuthStateChanged(AuthState state) {
-//
-//    if(state == AuthState.LOGGED_IN)
-//      Navigator.of(ctx).pushReplacementNamed("/home");
-//  }
-
   @override
   Widget build(BuildContext context) {
     ctx = context;

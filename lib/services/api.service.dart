@@ -9,27 +9,24 @@ class ApiService {
   static final LOGIN_URL = BASE_URL + "/auth/v1/users/login";
 
 
-  Future<UserModel> login(String email, String password) async {
-    try {
-      final response = await http.post(LOGIN_URL, body: {
+  Future<UserModel> login(String email, String password)  async {
+    UserModel model;
+
+     await http.post(LOGIN_URL, body: {
         "email": email,
         "password": password
-      });
+      }).then((res) {
+        model = UserModel.fromJson(jsonDecode(res.body));
+        print('response from service');
+        print(model);
+
+     }).catchError((e){
+       print('print err, from service: $e');
+       throw (e.toString());
+     });
 
 
-      print('response: -' + json.decode(response.body));
-      final user = UserModel.fromJson(json.decode(response.body));
-      if (user.status) {
-        print('print from service: $user');
-        return user;
-      } else {
-        print('print error from service: $user');
-        throw (user.message);
-      }
-    } catch (e) {
-      print('print err, from service: $e');
-      throw (e.toString());
-    }
+    return model != null?  model: 'noData';
   }
 
 }

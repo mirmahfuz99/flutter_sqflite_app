@@ -3,7 +3,8 @@ class UserModel {
   bool status;
   int statusCode;
   String message;
-  Data data;
+//  String data;
+  Map<String, dynamic> data;
 
   UserModel(
       {
@@ -14,25 +15,16 @@ class UserModel {
       });
 
   factory UserModel.fromJson(Map<String, dynamic> parsedJson){
-    return UserModel(
+    print('parseJSON');
+//    print(parsedJson);
+    UserModel model = UserModel(
         status: parsedJson['status'],
         statusCode : parsedJson['statusCode'],
-        message : parsedJson ['message'],
-        data :  Data.fromJson(parsedJson ['data'])
+        message : parsedJson['message'],
+        data :  parsedJson['data']
     );
+    print(model);
+    return model;
   }
 
-}
-class Data{
-  String access_token;
-
-  Data({
-    this.access_token
-  });
-
-  factory Data.fromJson(Map<String, String> json){
-    return Data(
-        access_token: json['access_token']
-    );
-  }
 }
