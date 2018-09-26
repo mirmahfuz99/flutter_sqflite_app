@@ -1,10 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_sqflite_app/auth.dart';
-import 'package:flutter_sqflite_app/data/database_helper.dart';
-import 'package:flutter_sqflite_app/model/user.dart';
-import 'package:flutter_sqflite_app/screens/login/login_screen_presenter.dart';
-
+import 'package:flutter_sqflite_app/controller/login.controller.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,48 +10,43 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class LoginScreenState extends State<LoginScreen>
-    implements LoginScreenContract, AuthStateListener {
-  BuildContext _ctx;
+class LoginScreenState extends State<LoginScreen>{
+  BuildContext ctx;
 
-  bool _isLoading = false;
+  bool isLoading = false;
   final formKey = new GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   String _password, _email;
 
-  LoginScreenPresenter _presenter;
-
+  LoginController loginCtrl;
   LoginScreenState() {
-    _presenter = new LoginScreenPresenter(this);
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.subscribe(this);
+    loginCtrl = new LoginController();
   }
 
   void _submit() {
     final form = formKey.currentState;
 
     if (form.validate()) {
-      setState(() => _isLoading = true);
+      setState(() => isLoading = true);
       form.save();
-      _presenter.doLogin(_email, _password);
+      loginCtrl.login(_email, _password);
     }
   }
 
-  void _showSnackBar(String text) {
-    scaffoldKey.currentState
-        .showSnackBar(new SnackBar(content: new Text(text)));
-  }
-
-  @override
-  onAuthStateChanged(AuthState state) {
-
-    if(state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).pushReplacementNamed("/home");
-  }
+//  void _showSnackBar(String text) {
+//    scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(text)));
+//  }
+//
+//  @override
+//  onAuthStateChanged(AuthState state) {
+//
+//    if(state == AuthState.LOGGED_IN)
+//      Navigator.of(ctx).pushReplacementNamed("/home");
+//  }
 
   @override
   Widget build(BuildContext context) {
-    _ctx = context;
+    ctx = context;
     var loginBtn = new RaisedButton(
       onPressed: _submit,
       child: new Text("LOGIN"),
@@ -93,7 +84,7 @@ class LoginScreenState extends State<LoginScreen>
             ],
           ),
         ),
-        _isLoading ? new CircularProgressIndicator() : loginBtn
+        isLoading ? new CircularProgressIndicator() : loginBtn
       ],
       crossAxisAlignment: CrossAxisAlignment.center,
     );
@@ -121,20 +112,18 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
-  @override
-  void onLoginError(String errorTxt) {
-    _showSnackBar(errorTxt);
-    setState(() => _isLoading = false);
-  }
-
-  @override
-  void onLoginSuccess(User user) async {
-    _showSnackBar(user.toString());
-    setState(() => _isLoading = false);
-    var db = new DatabaseHelper();
-    await db.saveUser(user);
-    // Navigator.of(context).pushNamed("/home");
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.notify(AuthState.LOGGED_IN);
-  }
+//  @override
+//  void onLoginError(String errorTxt) {
+//    _showSnackBar(errorTxt);
+//    setState(() => isLoading = false);
+//  }
+//
+//  @override
+//  void onLoginSuccess(User user) async {
+//    _showSnackBar(user.toString());
+//    setState(() => isLoading = false);
+//     Navigator.of(context).pushNamed("/home");
+//    var authStateProvider = new AuthStateProvider();
+//    authStateProvider.notify(AuthState.LOGGED_IN);
+//  }
 }
